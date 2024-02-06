@@ -1,2 +1,3 @@
-# harney
-USGS-OWRD Harney Basin Data Mapper
+# USGS-OWRD Harney Basin Data Mapper
+
+This interactive web page provides access to current and historic water​-level data collected by the U.S. Geological Survey (USGS) and the Oregon Water Resources Department (OWRD). Web page tools allow users to graph water levels and map water​-level changes between any two time periods. Data for individual wells are filtered to remove measurements collected during active pumping because they do not accurately represent conditions in the aquifer. Water​-level data can also be found using existing tools, such as the USGS NWIS-Web system and the OWRD water levels and hydrographs page. For help using the USGS-OWRD interactive web page, click the about button (found in the upper right) and a text window will appear with options describing web page features. 
