@@ -1,0 +1,26 @@
+<!--
+ * version 3.21
+ * February 5, 2024
+-->
+<hr></hr> 
+<p>
+  This interactive web page provides access to current and historic water​-level data collected by the 
+  U.S. Geological Survey (USGS) and the Oregon Water Resources Department (OWRD). Web page tools allow 
+  users to graph water levels and map water​-level changes between any two time periods. Data for  
+  individual wells are filtered to remove measurements collected during active pumping because they do 
+  not accurately represent conditions in the aquifer. Water​-level data can also be found using existing 
+  tools, such as the USGS <a href="http://waterdata.usgs.gov/or/nwis/" target="_blank">NWIS-Web</a> 
+  system and the OWRD <a href="http://www.oregon.gov/owrd/pages/gw/well_data.aspx" target="_blank">water  
+  levels and hydrographs page</a>. For help using the USGS-OWRD interactive web page, click the about button 
+  (found in the upper right) and a text window will appear with options describing web page features.
+</p> 
+<p>
+  Users are cautioned to consider the nature of the information presented here before making decisions 
+  using it that concern personal or public safety or the conduct of business that concerns substantial 
+  monetary or operational consequences. Although these data have been processed successfully on a computer 
+  system at the U.S. Geological Survey (USGS), no warranty expressed or implied is made regarding the display 
+  or utility of the data on any other system or for general or scientific purposes, nor shall the act of 
+  distribution constitute any such warranty. The USGS or the U.S. Government shall not be held liable for 
+  improper or incorrect use of the data described and/or contained herein.
+ </p>
+ 
