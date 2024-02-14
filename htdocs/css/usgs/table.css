@@ -1,0 +1,154 @@
+/**
+ * Namespace: table.css
+ *
+ * The file table.css is a css file to providing styling for employee table. 
+ *
+ * version 2.04
+ * February 13, 2024
+*/
+
+/*
+###############################################################################
+# Copyright (c) Office of Planning and Programming (OPP)
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+# OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+# DEALINGS IN THE SOFTWARE.
+###############################################################################
+*/
+
+.top-bottom-border {
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+}
+
+.no-border {
+  border: none;
+}
+
+div.dt-buttons {
+  width: auto !important;
+}
+
+#stationsTable_filter {
+  float: right;
+}
+
+.stations_table {
+   margin: 15px 5px 5px 15px;
+   padding: 5px 2px 2px 5px;
+   table-layout: fixed;
+   width: 100%
+}
+
+.counts_table {
+   margin: auto;
+   width: 60%;
+}
+
+#siteTable, #countsTable {
+    color: black;
+    padding: 5px;
+}
+
+#siteTable caption,
+#countsTable caption {
+    caption-side: top;
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.25rem;
+    border-bottom: 2px solid black;
+}
+
+#countsTable thead,
+#siteTable thead {
+    text-align: left;
+    font-weight: bold;
+    font-size: 1.0rem;
+    border: 2px solid black;
+}
+
+#countsTable tbody,
+#siteTable tbody {
+    text-align: left;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.counts_table td,
+.counts_table th {
+    border: 1px solid black;
+}
+
+th.sorting {
+   font-size: 1.0rem;
+}
+
+.stations_table tr:nth-child(even) { 
+ background-color: #f2f2f2;
+}
+
+.stations_table tr:hover {
+          background-color: #ffff99;
+}
+
+
+button.dt-button {
+          margin-right: 1em;
+        }
+
+button.dt-button:hover {
+          background-color: #c2c4c3;
+          color: #000;
+        }
+
+
+table.dataTable tbody tr .chosenRow {
+   border: 3px solid red!important;
+}
+
+.chosenRow {
+   color: red;
+   background-color: #e6e6e6;
+   font-weight: bold;
+}
+
+tr.warning, li.notAvailable {
+   color: red;
+}
+
+tr.Decline {
+  --dt-row-selected-text: #000000;
+  --dt-row-selected: #ffc6b3;
+  background-color: #ffc6b3!important;
+  fill-opacity: 0.15!important;
+}
+
+tr.Rise {
+  --dt-row-selected-text: #000000;
+  --dt-row-selected: #b3d1ff;
+  background-color: #b3d1ff!important;
+  fill-opacity: 0.15!important;
+}
+
+tr.NoChange {
+  --dt-row-selected-text: #000000;
+  --dt-row-selected: #ffb3ff;
+  background-color: #ffb3ff!important;
+  fill-opacity: 0.15!important;
+}
