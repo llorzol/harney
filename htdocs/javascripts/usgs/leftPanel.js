@@ -5,8 +5,8 @@
  *  a list of sites in a left panel that is linked to the sites on
  *  on the web map.
  *
- * version 3.16
- * February 11, 2024
+ * version 3.17
+ * February 14, 2024
 */
 
 /*
@@ -58,7 +58,7 @@ $("#monitoringAgency").on( "change", function( evt ) {
  
    // Build table
    //
-   harneyDataTables ("#stationsTable")
+   DataTables ("#stationsTable")
  
 });
  
@@ -83,7 +83,7 @@ $("#monitoringStatus").on( "change", function( evt ) {
  
    // Build table
    //
-   harneyDataTables ("#stationsTable")
+   DataTables ("#stationsTable")
  
 });
  
@@ -104,7 +104,7 @@ $("#finderLinks").on( "change", function( evt ) {
  
    // Build table
    //
-   harneyDataTables ("#stationsTable")
+   DataTables ("#stationsTable")
  
 });
 
