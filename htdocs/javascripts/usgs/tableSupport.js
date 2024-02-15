@@ -4,7 +4,7 @@
  * datatablesSupport is a JavaScript library to provide a set of functions to build
  *  a table with buttons to export table content.
  *
- * version 3.08
+ * version 3.09
  * February 14, 2024
 */
 
@@ -150,7 +150,7 @@ function fpsDataTable (tableSelector, myTitle, excelFileName)
      });
   }
 
-function DataTables (tableSelector) 
+function klamathDataTables (tableSelector) 
   {
      console.log("datatablesInit " + jQuery(tableSelector).length);
      var myTitle = $('caption#stationsCaption').text();
@@ -271,7 +271,7 @@ function DataTables (tableSelector)
      });
   }
 
-function harneyDataTables (tableSelector) 
+function DataTables (tableSelector) 
   {
      console.log("datatablesInit " + jQuery(tableSelector).length);
      var myTitle = $('caption#stationsCaption').text();
