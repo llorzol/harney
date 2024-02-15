@@ -4,8 +4,8 @@
  * datatablesSupport is a JavaScript library to provide a set of functions to build
  *  a table with buttons to export table content.
  *
- * version 3.04
- * January 29, 2024
+ * version 3.08
+ * February 14, 2024
 */
 
 /*
@@ -154,7 +154,7 @@ function DataTables (tableSelector)
   {
      console.log("datatablesInit " + jQuery(tableSelector).length);
      var myTitle = $('caption#stationsCaption').text();
-     console.log("myTitle " + myTitle);
+     //console.log("myTitle " + myTitle);
 
      // TableSorter - New Version with Fixed Headers
      //-------------------------------------------------
@@ -253,6 +253,19 @@ function DataTables (tableSelector)
                     doc.defaultStyle.fontSize = 8;
                     doc.styles.tableHeader.fontSize = 8;
                 }
+            },
+            {
+                text: 'Geojson',
+                autoPrint: true,
+                action: function ( e, dt, node, config ) {
+                    message = 'Exporting sites in geojson format';
+                    openModal(message);
+                    fadeModal(3000);
+                    var file = 'KlamathSites.geojson';
+                      saveAs(new File([JSON.stringify(geojsonSites)], file, {
+                        type: "text/plain;charset=utf-8"
+                      }), file);
+                }
             }
         ]
      });
@@ -289,11 +302,11 @@ function harneyDataTables (tableSelector)
             {
                 extend: 'excelHtml5',
                 text: 'Excel',
-                sheetName: "KlamathWells",
+                sheetName: "HarneyWells",
                 messageTop: myTitle,
                 title: '',
                 exportOptions: {
-                    columns: [0, 2, 3, 4, 5, 6, 7],
+                    columns: [0, 2, 3, 4, 5, 6],
                     rows: ':visible'
                 },
                     customize: function ( xlsx ) {
@@ -335,7 +348,7 @@ function harneyDataTables (tableSelector)
                 messageTop: myTitle,
                 autoPrint: false,
                 exportOptions: {
-                    columns: [0, 2, 3, 4, 5, 6, 7],
+                    columns: [0, 2, 3, 4, 5, 6],
                     rows: ':visible'
                 },
                 customize: function (doc) {
@@ -354,12 +367,25 @@ function harneyDataTables (tableSelector)
                 messageTop: myTitle,
                 autoPrint: false,
                 exportOptions: {
-                    columns: [0, 2, 3, 4, 5, 6, 7],
+                    columns: [0, 2, 3, 4, 5, 6],
                     rows: ':visible'
                 },
                 customize: function (doc) {
                     doc.defaultStyle.fontSize = 8;
                     doc.styles.tableHeader.fontSize = 8;
+                }
+            },
+            {
+                text: 'Geojson',
+                autoPrint: true,
+                action: function ( e, dt, node, config ) {
+                    message = 'Exporting sites in geojson format';
+                    openModal(message);
+                    fadeModal(3000);
+                    var file = 'HarneySites.geojson';
+                      saveAs(new File([JSON.stringify(geojsonSites)], file, {
+                        type: "text/plain;charset=utf-8"
+                      }), file);
                 }
             }
         ]
