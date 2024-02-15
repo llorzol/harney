@@ -4,7 +4,7 @@
  * Map is a JavaScript library to set of functions to build
  *  a map.
  *
- * version 3.27
+ * version 3.29
  * February 14, 2024
 */
 
@@ -151,8 +151,10 @@ function buildMap()
            var myTitle      = [];
            var site_no      = mySiteInfo[site_id].site_no;
            var coop_site_no = mySiteInfo[site_id].coop_site_no;
+           var cdwr_id      = mySiteInfo[site_id].cdwr_id;
            if(site_no)      { myTitle.push("USGS " + site_no); }
            if(coop_site_no) { myTitle.push("OWRD " + coop_site_no); }
+           if(cdwr_id)      { myTitle.push("CDWR " + cdwr_id); }
 
            return L.marker(latlng, { pane: 'allSites', icon: myIcon, title: myTitle.join(" "), siteID: site_id } );
           },
@@ -283,7 +285,7 @@ function buildMap()
 
   // Add table sorting
   //
-  harneyDataTables ("#stationsTable");
+  var myTable = DataTables ("#stationsTable");
 
    // Close
    //
@@ -549,7 +551,7 @@ function createTable (mySiteSet)
    // Create table caption
    //
    var myCaption = [];
-   myCaption.push('Groundwater Sites for Harney Basin - ');
+   myCaption.push('Groundwater Sites for Upper Klamath Basin - ');
    myCaption.push(mySiteSet.length + ' sites');
    myCaption.push('(Monitored by ' + myAgency + ' -- ');
    myCaption.push(myStatus + ' sites)');
@@ -564,12 +566,15 @@ function createTable (mySiteSet)
    //
    var NumberUSGS          = 0;
    var NumberOWRD          = 0;
+   var NumberCDWR          = 0;
    var NumberALL           = 0;
 
    var NumberUSGSactive    = 0;
    var NumberUSGSinactive  = 0;
    var NumberOWRDactive    = 0;
    var NumberOWRDinactive  = 0;
+   var NumberCDWRactive    = 0;
+   var NumberCDWRinactive  = 0;
    var NumberALLactive     = 0;
    var NumberALLinactive   = 0;
 
@@ -584,6 +589,7 @@ function createTable (mySiteSet)
        summary_table.push(' <th>Graph</th>');
        summary_table.push(' <th>USGS site number</th>');
        summary_table.push(' <th>OWRD well log ID</th>');
+       summary_table.push(' <th>CDWR site code</th>');
        summary_table.push(' <th>Station Name</th>');
        summary_table.push(' <th>Groundwater Change</th>');
        summary_table.push(' <th>Monitoring Agency: Period of Record</th>');
@@ -606,6 +612,7 @@ function createTable (mySiteSet)
       var site_no              = mySiteInfo[siteID].site_no;
       var agency_cd            = mySiteInfo[siteID].agency_cd;
       var coop_site_no         = mySiteInfo[siteID].coop_site_no;
+      var cdwr_id              = mySiteInfo[siteID].cdwr_id;
       var station_nm           = mySiteInfo[siteID].station_nm;
       var site_tp_cd           = "GW";
       var latitude             = mySiteInfo[siteID].dec_lat_va;
@@ -614,7 +621,11 @@ function createTable (mySiteSet)
       var periodic             = mySiteInfo[siteID].periodic;
       var recorder             = mySiteInfo[siteID].recorder;
           
-      var gw_change            = mySiteInfo[siteID].gw_change;
+      var gw_change            = '';
+      if(gwChangeSites[siteID])
+        {
+         gw_change = gwChangeSites[siteID];
+        }
           
       var gw_status            = mySiteInfo[siteID].gw_status;
       var gw_begin_date        = mySiteInfo[siteID].gw_begin_date;
@@ -645,6 +656,15 @@ function createTable (mySiteSet)
       var owrd_rc_end_date     = mySiteInfo[siteID].owrd_rc_end_date;
       var owrd_rc_count        = mySiteInfo[siteID].owrd_rc_count;
       var owrd_rc_status       = mySiteInfo[siteID].owrd_rc_status;
+          
+      var cdwr_begin_date      = mySiteInfo[siteID].cdwr_begin_date;
+      var cdwr_end_date        = mySiteInfo[siteID].cdwr_end_date;
+      var cdwr_count           = mySiteInfo[siteID].cdwr_count;
+      var cdwr_status          = mySiteInfo[siteID].cdwr_status;
+      var cdwr_rc_begin_date   = mySiteInfo[siteID].cdwr_rc_begin_date;
+      var cdwr_rc_end_date     = mySiteInfo[siteID].cdwr_rc_end_date;
+      var cdwr_rc_count        = mySiteInfo[siteID].cdwr_rc_count;
+      var cdwr_rc_status       = mySiteInfo[siteID].cdwr_rc_status;
 
       // Set object for geojson output
       //
@@ -682,6 +702,13 @@ function createTable (mySiteSet)
          var owrd_url  = owrdLink + coop_site_no;
          owrd_link     ='  <a class="popupLink" href="#" onclick="window.open(\'' + owrd_url + '\' , \'_blank\'); return;">' + coop_site_no + '</a>';
         }
+         
+      var cdwr_link = '';
+      if(cdwr_id)
+        {
+         var cdwr_url  = cdwrLink + cdwr_id;
+         cdwr_link     ='  <a class="popupLink" href="#" onclick="window.open(\'' + cdwr_url + '\' , \'_blank\'); return;">' + cdwr_id + '</a>';
+        }
 
       // Counters
       //
@@ -704,6 +731,12 @@ function createTable (mySiteSet)
                if(/^active/i.test(site_status)) { NumberOWRDactive++; }
                else { NumberOWRDinactive++; }
                //console.log(site_id);
+              }
+            if(site_agency_cd.includes("CDWR"))
+              {
+               NumberCDWR++;
+               if(/^active/i.test(site_status)) { NumberCDWRactive++; }
+               else { NumberCDWRinactive++; }
               }
            }
          else
@@ -753,6 +786,18 @@ function createTable (mySiteSet)
                          owrd_link,
                          ' </td>'
                         );
+
+      // CDWR Inventory page
+      //
+      //  Inventory page work  https://wdl.water.ca.gov/WaterDataLibrary/GroundWaterLevel.aspx?SiteCode=417786N1220041W001
+      //
+      //
+      summary_table.push(
+                         ' <td class="stationName">',
+                         cdwr_link,
+                         ' </td>'
+                        );
+
       
       // Station name
       //
@@ -828,17 +873,17 @@ function createTable (mySiteSet)
 
    $(".NumberUSGS").text(NumberUSGS);
    $(".NumberOWRD").text(NumberOWRD);
+   $(".NumberCDWR").text(NumberCDWR);
    $(".NumberALL").text(NumberALL);
 
    $(".NumberUSGSactive").text(NumberUSGSactive);
    $(".NumberUSGSinactive").text(NumberUSGSinactive);
    $(".NumberOWRDactive").text(NumberOWRDactive);
    $(".NumberOWRDinactive").text(NumberOWRDinactive);
+   $(".NumberCDWRactive").text(NumberCDWRactive);
+   $(".NumberCDWRinactive").text(NumberCDWRinactive);
    $(".NumberALLactive").text(NumberALLactive);
    $(".NumberALLinactive").text(NumberALLinactive);
- 
-   console.log(" geojsonSites");
-   console.log(geojsonSites);
  
    return summary_table.join("\n");
   }
