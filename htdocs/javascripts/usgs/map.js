@@ -4,7 +4,7 @@
  * Map is a JavaScript library to set of functions to build
  *  a map.
  *
- * version 3.29
+ * version 3.30
  * February 14, 2024
 */
 
@@ -283,7 +283,7 @@ function buildMap()
 
   // Add table sorting
   //
-  harneyDataTables ("#stationsTable");
+  DataTables ("#stationsTable");
 
    // Close
    //
