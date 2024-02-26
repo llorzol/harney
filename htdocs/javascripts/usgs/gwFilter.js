@@ -4,8 +4,8 @@
  * parameterData is a JavaScript library to provide a set of functions to manage
  *  the data exploration tool.
  *
- * version 3.31
- * February 15, 2024
+ * version 3.33
+ * February 20, 2024
 */
 
 /*
@@ -57,6 +57,7 @@ var SeasonIntervals = {
 var SeasonsList = ['Winter','Spring','Summer','Fall'];
 
 var selectedSeasonIntervals;
+
 var gwLevelContent     = ''
    
 var SeasonAgruments    = [];
@@ -72,7 +73,7 @@ var filterGroundwater = [];
 filterGroundwater.push('  <!-- Groundwater Filter -->');
 filterGroundwater.push('  <div id="groundWater" class="chooseGw">');
 filterGroundwater.push('   <div>');
-filterGroundwater.push('    <div class="section text-xs-left">');
+filterGroundwater.push('    <div class="section text-start">');
 filterGroundwater.push('    </div> <!-- class="section" -->');
 filterGroundwater.push('    <div class="filterGw"></div>');
 filterGroundwater.push('   </div> <!-- id="selectGwChange" -->');
@@ -89,34 +90,31 @@ $('.gwChangeLegend').hide();
 //
 var interval     = [0,1,5,10,20,30];
 var circleRadius = 10;
-var content      = '<ul class="no-bullets">';
-content         += '<li>';
-//content         += ' <img class="symbols lineSymbol" src="icons/red_gw.png" />';
-content         += ' <span class="gwDecliningCircle" style="vertical-align:middle; width: ' + 2*circleRadius +'px; height: ' + 2*circleRadius + 'px"></span>';
-content         += ' <span class="vertical-centered-text">Groundwater Level Decline</span>';
+var content      = '<ul class="list-group list-group-flush">';
+content         += '<li class="list-group-item">';
+content         += ' <span class="gwDecliningCircle rounded-circle align-middle" style="width: ' + 2*circleRadius +'px; height: ' + 2*circleRadius + 'px"></span>';
+content         += ' <span class="fs-6 text-start align-middle">Groundwater Level Decline</span>';
 content         += '</li>';
-content         += '<li>';
-//content         += ' <img class="symbols lineSymbol" src="icons/blue_gw.png" />';
-content         += ' <span class="gwRisingCircle" style="vertical-align:middle; width: ' + 2*circleRadius +'px; height: ' + 2*circleRadius + 'px"></span>';
-content         += ' <span class="vertical-centered-text">Groundwater Level Rise</span>';
+content         += '<li class="list-group-item">';
+content         += ' <span class="gwRisingCircle rounded-circle align-middle" style="width: ' + 2*circleRadius +'px; height: ' + 2*circleRadius + 'px"></span>';
+content         += ' <span class="fs-6 text-start align-middle">Groundwater Level Rise</span>';
 content         += '</li>';
-content         += '<li>';
-//content         += ' <img class="symbols lineSymbol" src="icons/violet_gw.png" />';
-content         += ' <span class="gwNeutralCircle" style="vertical-align:middle; width: ' + 2*circleRadius +'px; height: ' + 2*circleRadius + 'px"></span>';
-content         += ' <span class="vertical-centered-text">No Change</span>';
+content         += '<li class="list-group-item">';
+content         += ' <span class="gwNeutralCircle rounded-circle align-middle" style="width: ' + 2*circleRadius +'px; height: ' + 2*circleRadius + 'px"></span>';
+content         += ' <span class="fs-6 text-start align-middle">No Change</span>';
 content         += '</li>';
 
 for(var i = 0; i < interval.length-1; i++)
   {
-   content += '<li><span class="circleBase" style="vertical-align:middle; width: ' + 2*circleRadius +'px; height: ' + 2*circleRadius +'px"></span>';
-   content += '    <span>' + interval[i].toFixed(1) + (interval[i + 1].toFixed(1) ? '&ndash;' + interval[i + 1].toFixed(1) + '</span>' : '+');
+   content += '<li class="list-group-item"><span class="circleBase rounded-circle align-middle" style="width: ' + 2*circleRadius +'px; height: ' + 2*circleRadius +'px"></span>';
+   content += '    <span class="fs-6 text-start align-middle">' + interval[i].toFixed(1) + (interval[i + 1].toFixed(1) ? '&ndash;' + interval[i + 1].toFixed(1) + '</span>' : '+');
    content += '</li>';
 
    circleRadius += 5;
   }
-content         += '<li>';
-content         += ' <span class="circleBase text-left" style="vertical-align:middle; width: ' + 2*circleRadius +'px; height: ' + 2*circleRadius +'px"></span>';
-content         += ' <span>>' + interval[i].toFixed(1) + '</span>';
+content         += '<li class="list-group-item">';
+content         += ' <span class="circleBase rounded-circle align-middle" style="width: ' + 2*circleRadius +'px; height: ' + 2*circleRadius +'px"></span>';
+content         += ' <span class="fs-6 text-start align-middle">>' + interval[i].toFixed(1) + '</span>';
 content         += '</li>';
 content         += '</ul>';
       
@@ -181,14 +179,14 @@ function setfilterGwHtml()
         
    // Define content
    //
-   var content = '<div class="sectionHead">Select a Year then Season</div>';
+   var content = '<div class="sectionHead mb-2 p-1 rounded">Select a Year then Season</div>';
    content    += '<div class="warningModal">';
-   content    += ' <div class="dlist">Choose an Older Year and Season:';
-   content    += "  <div class='row'>";
+   content    += ' <div class="dlist mb-2">Choose an Older Year and Season:';
+   //content    += "  <div class='row'>";
         
    // Define oldest year and season
    //
-   content    += "   <select id='startingYear'>";
+   content    += "   <select id='startingYear' class='mb-2 me-5 ps-3 pe-5'>";
    var firstYear = oldestYears[0];
    jQuery.each(oldestYears, function(index, year) 
      {
@@ -203,7 +201,7 @@ function setfilterGwHtml()
      });
    content    += "   </select>";
 
-   content    += "   <select id='startingSeason'>";
+   content    += "   <select id='startingSeason' class='mb-2 ps-3 pe-5'>";
    var selectedOption = true;
    for (season of SeasonsList)
      {
@@ -223,13 +221,13 @@ function setfilterGwHtml()
    content    += "   </select>";
 
    content    += "  </div>";
-   content    += " </div>";
+   //content    += " </div>";
 
    // Define youngest year and season
    //
-   content    += ' <div class="dlist">Choose a Younger Year and Season:';
-   content    += "  <div class='row'>";
-   content    += "   <select id='endingYear'>";
+   content    += ' <div class="dlist mb-2">Choose a Younger Year and Season:';
+   //content    += "  <div class='row'>";
+   content    += "   <select id='endingYear' class='mb-2 me-5 ps-3 pe-5'>";
    var firstYear = newestYears[0];
    jQuery.each(newestYears, function(index, year) 
      {
@@ -244,7 +242,7 @@ function setfilterGwHtml()
      });
    content    += "   </select>";
 
-   content    += "   <select id='endingSeason'>";
+   content    += "   <select id='endingSeason' class='mb-2 ps-3 pe-5'>";
    var selectedOption = true;
    for (season of SeasonsList)
      {
@@ -262,12 +260,12 @@ function setfilterGwHtml()
         }
      }
    content    += "   </select>";
-   content    += "  </div>";
+   //content    += "  </div>";
    content    += " </div>";
    content    += "</div>";
 
-   content    += ' <div><button type="button" class="btn btn-primary makeList" data-toggle="button">Display Selection</button></div>';
-   content    += ' <div><button type="button" class="btn-default refresh" data-toggle="button">Refresh Map</button></div>';
+   content    += ' <div><button type="button" class="btn btn-primary makeList rounded mb-2 p-1" data-toggle="button">Display Selection</button></div>';
+   content    += ' <div><button type="button" class="btn-default refresh rounded mb-2 p-1" data-toggle="button">Refresh Map</button></div>';
    content    += "</div>";
 
    // Set content for site filter
@@ -676,200 +674,6 @@ function makeGwChangeMap(gwChanges)
       var tableRows = $('.stations_table tr:contains(Decline)').addClass('Decline');
       var tableRows = $('.stations_table tr:contains(No change)').addClass('NoChange');
       var tableRows = $('.stations_table tr:contains(Rise)').addClass('Rise');
-     }
-      
-   else
-     {
-      closeModal();
-      var message = "No sites met the selection criteria";
-      openModal(message);
-      fadeModal(2000);
-      clearCustomLevels()
-      setfilterGwHtml();
-     }
-
-   // Close
-   //
-   fadeModal(2000);
-
-   return customLevels;
-  }
-
-// Builds selected sites
-//
-function makeGwChangeMapSave(gwChanges)
-  {
-   console.log("makeGwChangeMap");
-
-   // Check if there are sites with value for change levels
-   //
-   if('message' in gwChanges)
-     {
-         $('#selectMessage').append('</br><div class="text-danger">Warning ' + gwChanges.message + "</div>");
-         return;
-     }
-
-   var customList   = [];
-   var siteCount    = 0;
-   var mapBounds    = map.getBounds();
-
-   // Remove existing custom sites
-   //
-   if(map.hasLayer(customLevels))
-     {
-      customLevels.clearLayers();
-     }
-         
-    // Toggle the visibility of column
-    //
-    var myTable = $('#stationsTable').DataTable();
-    var gwChangeColumn = 0
-    myTable.columns().header().to$().each(function( index ) {
-        //console.log( index + ": " + $( this ).text() );
-        if($( this ).text() === 'Groundwater Change') {
-            myTable.column([index]).visible( true );
-            gwChangeColumn = index;
-        }
-    });
-    //myTable.column([6]).visible( true );
-
-   // Build site list
-   //
-   allSites.eachLayer(function(site) {
-      if(map.hasLayer(site))
-        {
-         var table_txt       = 'No measurement';
-               
-         var properties      = site.feature.properties;
-         var site_id         = properties.site_id;
-
-         properties.gwchange = 'NULL';
-
-         //console.log("Site " + site_id);
-         if($('#gw_' + site_id).length > 0)
-           {
-            myTable.cell('#gw_' + site_id).data(table_txt);
-           }
-
-         if(mapBounds.contains(site.getLatLng()))
-           {
-            var site_no         = properties.site_no;
-            var coop_site_no    = properties.coop_site_no;
-            var cdwr_id         = properties.cdwr_id;
-            var station_nm      = properties.station_nm;
-            var state_well_nmbr = properties.state_well_nmbr;
-
-            var siteID          = site_id;
-               
-            var site_txt        = [];
-            if(site_no)      { site_txt.push("USGS " + site_no); }
-            if(coop_site_no) { site_txt.push("OWRD " + coop_site_no); }
-            if(cdwr_id)      { site_txt.push("CDWR " + state_well_nmbr); }
-
-            // Groundwater change value for user-chosen interval
-            //
-            if(gwChanges[siteID])
-              {
-               var latitude   = site.feature.geometry.coordinates[1];
-               var longitude  = site.feature.geometry.coordinates[0];
-
-               var gwValue    = gwChanges[siteID];
-               var radius     = getRadius(Math.abs(parseFloat(gwValue)));
-               var color      = getColor(gwValue);
-
-               // Add selected
-               //
-               $('#tr_' + site_id).addClass('selected gwChange');
-
-               // Text
-               //
-               if(gwValue > 0)
-                 { 
-                  table_txt = "Rise " + Math.abs(gwValue) + " feet";
-                  site_txt.push(table_txt);
-                  $('#tr_' + site_id).addClass('Rise');
-                 }
-               else if(gwValue < 0)
-                 {
-                  table_txt = "Decline " + Math.abs(gwValue) + " feet";
-                  site_txt.push(table_txt);
-                  $('#tr_' + site_id).addClass('Decline');
-                 }
-               else
-                 {
-                  table_txt = "No change";
-                  site_txt.push(table_txt);
-                 }
-                  
-               site.feature.properties.gwchange = gwValue;
-                  
-               var circle     = L.circleMarker([latitude, longitude], 
-                                               { 
-                                                //site_no: coop_site_no,
-                                                pane: 'gwChangePane',
-                                                radius: radius,
-                                                color: color,
-                                                weight: 1,
-                                                fillColor: color,
-                                                fillOpacity: 0.15
-               });
-
-               // Bind tooltip to show value on hover
-               //
-               circle.bindTooltip(site_txt.join(" ")).openTooltip();
-
-               // Add layer
-               //
-               customLevels.addLayer(circle);
-
-               siteCount++;
-              }
-
-            // Hide row No measurement for user-chosen interval
-            //
-            else
-              {
-                  $('#tr_' + site_id).css('display','none');
-              }
-           }
- 
-         // Add text to gw change column in table
-         //
-         if($('#gw_' + site_id).length > 0)
-           {
-            myTable.cell('#gw_' + site_id).data(table_txt);
-           }
-        }
-   });
-
-   // Add layer of selected sites
-   //
-   console.log("CustomLevels count " + siteCount);
-   if(siteCount > 0)
-     {
-      // Set table caption
-      //
-      $("#stationsCaption").append([" --", siteCount, "Sites with measurements"].join(" "));
-
-      // Remove existing sites
-      //
-      if(map.hasLayer(allSites))
-        {
-         map.removeLayer(allSites);
-        }
-
-      // Remove existing sites
-      //
-      if(map.hasLayer(customSites))
-        {
-         map.removeLayer(customSites);
-        }
-
-      customLevels.addTo(map).bringToFront();
-
-      // Add legend
-      //
-      $('.gwChangeLegend').show();
      }
       
    else
