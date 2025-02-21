@@ -4,8 +4,8 @@
  * datatablesSupport is a JavaScript library to provide a set of functions to build
  *  a table with buttons to export table content.
  *
- * version 3.09
- * February 14, 2024
+ * version 3.11
+ * February 20, 2025
 */
 
 /*
@@ -102,6 +102,7 @@ var printButton =
 //
 function fpsDataTable (tableSelector, myTitle, excelFileName) 
   {
+     console.log("fpsDataTable");
      console.log("datatablesInit " + jQuery(tableSelector).length);
 
      // TableSorter - New Version with Fixed Headers
@@ -150,132 +151,12 @@ function fpsDataTable (tableSelector, myTitle, excelFileName)
      });
   }
 
-function klamathDataTables (tableSelector) 
-  {
-     console.log("datatablesInit " + jQuery(tableSelector).length);
-     var myTitle = $('caption#stationsCaption').text();
-     //console.log("myTitle " + myTitle);
-
-     // TableSorter - New Version with Fixed Headers
-     //-------------------------------------------------
-     var table = jQuery(tableSelector).DataTable( {
-         rowGroup: {dataSrc: 1 },
-         "paging":    false,
-         scrollCollapse: true,
-         scrollY: '40vh',
-         "ordering":  true,
-         //"info":      false,
-         //"searching": false,
-         "autoWidth": true,
-         "stripeClasses": [],
-         "bAutoWidth": false,
-         "columnDefs": [
-            {
-                "targets": [ 6 ],
-                "visible": false,
-                "searchable": false
-            }],
-         "order": [[2, 'asc' ]],
-         dom: 'Bfrtip',
-         buttons: [
-            {
-                extend: 'excelHtml5',
-                text: 'Excel',
-                sheetName: "KlamathWells",
-                messageTop: myTitle,
-                title: '',
-                exportOptions: {
-                    columns: [0, 2, 3, 4, 5, 6, 7],
-                    rows: ':visible'
-                },
-                    customize: function ( xlsx ) {
-                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
-                        $('row:first c', sheet).attr( 's', '17' );
-                        
-                        // Get unique values from rowGroup.dataSrc column
-                        //
-                        var groupNames = [... new Set( table.column(0).data().toArray() )];
-                        //console.log('Groups:', groupNames);
-        
-                        // Loop over all cells in sheet
-                        //
-                        //$('row a', sheet).each( function () {
-                        var skippedHeader = false;
-                        $('row c', sheet).each( function () {
-                            //console.log(" Row " + $(this).text());
-                            
-                            if (skippedHeader) {
-                                
-                                // If active
-                                //
-                                if ( $('is t', this).text().indexOf("Active") > -1 ) {
-                                   $(this).attr('s', '37');
-                               }
-        
-                               else if ( $('is t', this).text().indexOf("Inactive") > -1 ) {
-                                   $(this).attr('s', '2');
-                               }
-                            }
-                            else {
-                                skippedHeader = true;
-                            }
-                        });
-                    }
-            },
-            {
-                extend: 'print',
-                messageTop: myTitle,
-                autoPrint: false,
-                exportOptions: {
-                    columns: [0, 2, 3, 4, 5, 6, 7],
-                    rows: ':visible'
-                },
-                customize: function (doc) {
-                    $(doc.document.body).find('h1').css('font-size', '16pt');
-                    $(doc.document.body).find('h1').css('text-align', 'center');
-                    $(doc.document.body).find('h1').css('font-weight:', 'bold');
-                    $(doc.document.body).find('div').css('font-size', '14pt');
-                    $(doc.document.body).find('div').css('text-align', 'center');
-                    $(doc.document.body).find('div').css('font-weight:', 'bold');
-                    $(doc.document.body).find('thead').css('font-size', '12pt');
-                    $(doc.document.body).find('tbody').css('font-size', '10pt');
-                }
-            },
-            {
-                extend: 'pdfHtml5',
-                messageTop: myTitle,
-                autoPrint: false,
-                exportOptions: {
-                    columns: [0, 2, 3, 4, 5, 6, 7],
-                    rows: ':visible'
-                },
-                customize: function (doc) {
-                    doc.defaultStyle.fontSize = 8;
-                    doc.styles.tableHeader.fontSize = 8;
-                }
-            },
-            {
-                text: 'Geojson',
-                autoPrint: true,
-                action: function ( e, dt, node, config ) {
-                    message = 'Exporting sites in geojson format';
-                    openModal(message);
-                    fadeModal(3000);
-                    var file = 'KlamathSites.geojson';
-                      saveAs(new File([JSON.stringify(geojsonSites)], file, {
-                        type: "text/plain;charset=utf-8"
-                      }), file);
-                }
-            }
-        ]
-     });
-  }
-
 function DataTables (tableSelector) 
   {
+     console.log("DataTables");
      console.log("datatablesInit " + jQuery(tableSelector).length);
-     var myTitle = $('caption#stationsCaption').text();
-     console.log("myTitle ->" + myTitle);
+     var myTitle = $('#stationsCaption').text();
+     //console.log("myTitle " + myTitle);
 
      // TableSorter - New Version with Fixed Headers
      //-------------------------------------------------
@@ -382,12 +263,85 @@ function DataTables (tableSelector)
                     message = 'Exporting sites in geojson format';
                     openModal(message);
                     fadeModal(3000);
-                    var file = 'HarneySites.geojson';
+                    var file = 'KlamathSites.geojson';
                       saveAs(new File([JSON.stringify(geojsonSites)], file, {
                         type: "text/plain;charset=utf-8"
                       }), file);
                 }
             }
+        ]
+     });
+  }
+
+// https://regex101.com/r/eR2oH3/24
+// https://datatables.net/reference/button/excelHtml5#Built-in-styles
+// https://stackoverflow.com/questions/41485310/exporting-jquery-datatable-to-excel-with-additional-rows-is-not-working-ie
+// https://stackoverflow.com/questions/61313581/jquery-datatable-export-to-excel-customization-make-first-row-bold
+// https://stackoverflow.com/questions/40243616/jquery-datatables-export-to-excelhtml5-hyperlink-issue
+// https://stackoverflow.com/questions/41230596/datatables-how-to-fill-a-column-with-a-hyperlink
+// https://datatables.net/extensions/buttons/examples/html5/titleMessage.html
+//
+function exportCustomExcel (tableSelector, myTitle) 
+  {
+     console.log("exportCustomExcel");
+     console.log("datatablesInit " + jQuery(tableSelector).length);
+
+     // TableSorter - New Version with Fixed Headers
+     //-------------------------------------------------
+     jQuery(tableSelector).DataTable( {
+        "paging":    false,
+        "ordering":  true,
+        "info":      false,
+        "searching": false,
+        "autoWidth": true,
+        "stripeClasses": [],
+        dom: 'Bfrtip',
+        "order": [[1, 'asc' ]],
+        buttons: [
+            $.extend( true, {}, excelButton, {
+                extend: 'excelHtml5',
+                columns: [0, 1, 2, 3, 4, 5, 6],
+                title: '',
+                messageTop: myTitle,
+                sheetName: "FPS",
+                customize: function ( xlsx ) {
+                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                    $('row:first c', sheet).attr( 's', '42' );
+
+                    // Loop over all cells in sheet
+                    //
+                    //$('row a', sheet).each( function () {
+                    $('row href', sheet).each( function () {
+                        console.log(" Row " + $(this).text());
+
+                        // If cell starts with http
+                        //
+                        if ( $('is t', this).text().indexOf("<a href") === 0 ) {
+
+                           // (2.) change the type to `str` which is a formula
+                           //
+                           $(this).attr('t', 'str');
+                           
+                           // Append the formula
+                           //
+                           $(this).append('<f>' + 'HYPERLINK("'+$('is t', this).text()+'","'+$('is t', this).text()+'")'+ '</f>');
+                           
+                           // Remove the inlineStr
+                           //
+                           $('is', this).remove();
+                           
+                           // (3.) underline
+                           //
+                           $(this).attr( 's', '4' );
+                       }
+                    });
+                }
+            } ),
+            $.extend( true, {}, printButton, {
+                extend: 'print',
+                title: myTitle,
+                autoPrint: false
+            } )
         ]
      });
   }

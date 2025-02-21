@@ -4,8 +4,8 @@
  * Map is a JavaScript library to set of functions to build
  *  a map.
  *
- * version 3.32
- * February 20, 2024
+ * version 3.35
+ * February 20, 2025
 */
 
 /*
@@ -206,10 +206,9 @@ function buildMap()
       map.addLayer(basinBoundary);
      }
 
-   // Add control
-   //
-   var zoomHome = L.Control.zoomHome();
-   zoomHome.addTo(map);
+    // Add home button
+    //
+    var zoom_bar = new L.Control.ZoomBar({position: 'topleft'}).addTo(map);
 
    // Add zoom to your location
    //
@@ -236,24 +235,34 @@ function buildMap()
    // Map bounds for geocoding tool
    //
    const bounds = map.getBounds();
- 
-   // Create the geocoding control and add it to the map
-   //
-   var searchControl = new L.esri.Controls.Geosearch({ zoomToResult: false, searchBounds: bounds }).addTo(map);
-   jQuery('.geocoder-control').prop('title', "Enter address, intersection, or latitude/longitude");
-   $(".geocoder-control").on("click", (e) => {
-       e.preventDefault();
-       e.stopPropagation();
-   });
- 
-      searchControl.on('results', function(data) {
-          //console.log("geocoding results ",data);
-          if(data.results.length == 1) {
-              // Set the bounds
-              //
-              map.fitBounds(data.bounds);
-          }
-   });
+
+  // Create the geocoding control and add it to the map
+  //
+    var searchControl = new GeoSearch.GeoSearchControl({
+      provider: new GeoSearch.OpenStreetMapProvider(),
+      showMarker: false,
+      autoClose: true, 
+      searchLabel: "Enter address or latitude/longitude"
+    })
+    map.addControl(searchControl);
+    $(".leaflet-control-geosearch form input").css('min-width', '400px');
+    $(".leaflet-control-geosearch form button").remove();
+    $(".leaflet-control-geosearch a").html('');
+    //$(".leaflet-control-geosearch a").html('<i class="bi bi-search searchPng"></i>')
+    $(".leaflet-control-geosearch a").html('<img src="leaflet-geosearch/search.svg" class="searchPng">')
+    //$(".leaflet-control-geosearch a").html('<i class="fa-solid fa-magnifying-glass"></i>')
+    $(".leaflet-control-geosearch a").css('font-size', '2.5rem');
+
+   
+                
+  map.on('geosearch/showlocation', function(data) {
+      console.log("geocoding results ",data);
+  			
+      if('location' in data)
+        {
+          var myAddress = { latlng: { lng: data.location.x,  lat: data.location.y } };
+        }
+  });
  
    // Refresh sites on extent change
    //
@@ -278,6 +287,8 @@ function buildMap()
            //
            var myTitle = $('caption#stationsCaption').text();
            DataTables ("#stationsTable");
+
+           $("#siteTable thead").addClass("border");
        }
  
    });
@@ -316,7 +327,7 @@ function setIcon (site_no, site_tp_cd, status)
   {
    var iconType   = [];
 
-   switch(site_tp_cd.substring(0,2))
+   switch(site_tp_cd.substring(0,2).toUpperCase())
      {
        case "ES":
        case "LK":
@@ -585,18 +596,19 @@ function createTable (mySiteSet)
 
    var summary_table = [];
 
-       summary_table.push('<table id="stationsTable" class="stations_table">');
-       summary_table.push('<caption id="stationsCaption">' +  myCaption.join(" ") + '</caption>');
+       summary_table.push('<span id="stationsCaption" class="border-bottom border-dark border-2 text-center fs-5 fw-bold">' +  myCaption.join(" ") + '</span>');
+       summary_table.push('<table id="stationsTable" class="stationsTable table table-striped-columns border mt-4">');
+       //summary_table.push('<caption id="stationsCaption" class="text-center fs-5 fw-bold">' +  myCaption.join(" ") + '</caption>');
        //summary_table.push('<thead class="bottom-border">');
-       summary_table.push('<thead>');
-       summary_table.push('<tr>');
-       summary_table.push(' <th>Status</th>');
-       summary_table.push(' <th>Graph</th>');
-       summary_table.push(' <th>USGS site number</th>');
-       summary_table.push(' <th>OWRD well log ID</th>');
-       summary_table.push(' <th>Station Name</th>');
-       summary_table.push(' <th>Groundwater Change</th>');
-       summary_table.push(' <th>Monitoring Agency: Period of Record</th>');
+       summary_table.push('<thead class="text-start fs-6 fw-bold">');
+       summary_table.push('<tr scope="row" class="pe-1 border border-dark border-2">');
+       summary_table.push(' <th scope="col">Status</th>');
+       summary_table.push(' <th scope="col">Graph</th>');
+       summary_table.push(' <th scope="col">USGS site number</th>');
+       summary_table.push(' <th scope="col">OWRD well log ID</th>');
+       summary_table.push(' <th scope="col">Station Name</th>');
+       summary_table.push(' <th scope="col">Groundwater Change</th>');
+       summary_table.push(' <th scope="col">Monitoring Agency: Period of Record</th>');
        summary_table.push('</tr>');
        summary_table.push('</thead>');
       
@@ -680,7 +692,7 @@ function createTable (mySiteSet)
       var myIcon               = site_icon;
       var symbol_img_src       = myIcon.options.iconUrl;
          
-      var gw_url               = gwLink + "site_id=" + site_id;
+      var gw_url               = `${gwLink}siteIdentifier=${site_id}&columnIdentifier=site_id&sourceIdentifier=${projectName}`;
       var gw_link              ='  <a class="popupLink" href="#" onclick="window.open(\'' + gw_url + '\' , \'_blank\'); return;">Link</a>';
          
       var nwis_link = '';

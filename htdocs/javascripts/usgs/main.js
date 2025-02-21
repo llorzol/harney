@@ -43,6 +43,9 @@ jQuery('.noJump').click(function(e){
 
 // Global variables for icon symbols
 //
+var mySites;
+var BasinBoundary;
+
 var mapSymbolUrl         = "icons/";
 
 // Global variables for images
@@ -51,9 +54,9 @@ var imageSrc             = "images/";
 
 // Link specs for table and popup content
 //
-var projectName          = "project=harney_gw";
+var projectName          = "harney_gw";
 
-var gwLink               = "http://127.0.0.1/discrete_gw/index.html?" + projectName + "&";
+var gwLink               = 'http://127.0.0.1/gw_hydrograph/index.html?';
 //var gwLink               = "https://or.water.usgs.gov/projs_dir/discrete_gw/index.html?" + projectName + "&";
 //var gwLink               = "https://staging-or.water.usgs.gov/discrete_gw/index.html?" + projectName + "&";
 
@@ -108,11 +111,24 @@ $(document).ready(function()
       
    // Web request
    //
-   webRequests.push($.ajax( {
-                             method:   request_type,
-                             url:      script_http, 
-                             data:     data_http, 
-                             dataType: dataType
+    webRequests.push($.ajax( {
+      method:   request_type,
+      url:      script_http,
+      data:     data_http,
+      dataType: dataType,
+      success: function (myData) {
+        message = "Processed site information";
+        openModal(message);
+        fadeModal(2000);
+        mySites = myData;
+        console.log(`mySites ${mySites}`);
+      },
+      error: function (error) {
+        message = `Failed to load site information ${error}`;
+        openModal(message);
+        fadeModal(2000);
+        return false;
+      }
    }));
 
    // Request for water-level information
@@ -129,11 +145,24 @@ $(document).ready(function()
       
    // Web request
    //
-   webRequests.push($.ajax( {
-                             method:   request_type,
-                             url:      script_http, 
-                             data:     data_http, 
-                             dataType: dataType
+    webRequests.push($.ajax( {
+      method:   request_type,
+      url:      script_http,
+      data:     data_http,
+      dataType: dataType,
+      success: function (myData) {
+        message = "Processed groundwater change information";
+        openModal(message);
+        fadeModal(2000);
+        processGwChange(myData);
+        console.log(`processGwChange ${myData}`);
+      },
+      error: function (error) {
+        message = `Failed to load groundwater change information ${error}`;
+        openModal(message);
+        fadeModal(2000);
+        return false;
+      }
    }));
 
    // Set basin boundary
@@ -153,12 +182,25 @@ $(document).ready(function()
       
       // Web request
       //
-      webRequests.push($.ajax( {
-                                method:   request_type,
-                                url:      script_http, 
-                                data:     data_http, 
-                                dataType: dataType
-      }));
+       webRequests.push($.ajax( {
+         method:   request_type,
+         url:      script_http,
+         data:     data_http,
+         dataType: dataType,
+         success: function (myData) {
+           message = "Processed basin boundary information";
+           openModal(message);
+           fadeModal(2000);
+           BasinBoundary = myData;
+           console.log(`mySites ${mySites}`);
+         },
+         error: function (error) {
+           message = `Failed to load basin boundary information ${error}`;
+           openModal(message);
+           fadeModal(2000);
+           return false;
+         }
+       }));
      }
 
    // Run ajax requests
