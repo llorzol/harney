@@ -4,8 +4,8 @@
  * parameterData is a JavaScript library to provide a set of functions to manage
  *  the data exploration tool.
  *
- * version 3.33
- * February 20, 2024
+ * version 3.34
+ * February 23, 2025
 */
 
 /*
@@ -38,7 +38,7 @@ var gwChangeSites = {};
 
 // Set starting year
 //-----------------------------------------------
-var startingYear = "2015";
+var startingYear = "2001";
 
 // Set starting and ending seasons
 //-----------------------------------------------
@@ -54,7 +54,7 @@ var SeasonIntervals = {
     'Fall'  : ['09','10','11','Max'],
     'Winter': ['12','01','02','Min']
                       };
-var SeasonsList = ['Winter','Spring','Summer','Fall'];
+var SeasonsList = ['Spring','Summer','Fall','Winter'];
 
 var selectedSeasonIntervals;
 
@@ -442,7 +442,7 @@ function requestGwChange(startingSeason, startingYear, endingSeason, endingYear)
     // Request for wells
     //
     var request_type = "GET";
-    var script_http  = "/cgi-bin/harney/requestGwChange.py";
+    var script_http  = "/cgi-bin/klamath_wells/requestGwChange.py";
     var data_http    = "seasonOne=" + seasonOne.join(",");
     data_http       += "&seasonTwo=" + seasonTwo.join(",");
           
@@ -470,6 +470,11 @@ function makeGwChangeMap(gwChanges)
          $('#selectMessage').append('</br><div class="text-danger">Warning ' + gwChanges.message + "</div>");
          return;
      }
+
+   var mapSiteSet =  buildSiteList();
+   var mapSiteIDs =  mapSiteSet.map(item => item.site_id);
+   console.log("mapSiteSet");
+   console.log(mapSiteSet);
 
    // Remove existing custom sites
    //
@@ -512,6 +517,10 @@ function makeGwChangeMap(gwChanges)
             var state_well_nmbr   = properties.state_well_nmbr;
             var site_tp_cd        = properties.site_tp_cd;
             var site_status       = 'Active';
+               
+      // Only process sites in mapview
+      //
+      if(mapSiteIDs.includes(site_id)) {
 
             // Set marker
             //                  
@@ -613,6 +622,7 @@ function makeGwChangeMap(gwChanges)
            {
             myTable.cell('#gw_' + site_id).data(table_txt);
            }
+        }
         }
    });
 
