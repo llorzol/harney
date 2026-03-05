@@ -5,8 +5,11 @@
  *  a list of sites in a left panel that is linked to the sites on
  *  on the web map.
  *
- * version 3.17
- * February 14, 2024
+ $Id: /var/www/html/klamath_wells/javascripts/usgs/leftPanel.js, v 3.18 2026/01/27 20:01:59 llorzol Exp $
+ $Revision: 3.18 $
+ $Date: 2026/01/27 20:01:59 $
+ $Author: llorzol $
+ *
 */
 
 /*
@@ -59,7 +62,6 @@ $("#monitoringAgency").on( "change", function( evt ) {
    // Build table
    //
    DataTables ("#stationsTable")
- 
 });
  
 // Enable selection of measuring status and reset sites visible
@@ -84,7 +86,6 @@ $("#monitoringStatus").on( "change", function( evt ) {
    // Build table
    //
    DataTables ("#stationsTable")
- 
 });
  
 // Enable selection by USGS or OWRD
@@ -105,7 +106,6 @@ $("#finderLinks").on( "change", function( evt ) {
    // Build table
    //
    DataTables ("#stationsTable")
- 
 });
 
 // Set leftPanel
@@ -285,7 +285,6 @@ function buildSiteList()
    var mySiteList   = [];
    var customList   = [];
    var siteCount    = 0;
-
    var mapBounds    = map.getBounds();
 
    // Check for all sites
@@ -527,7 +526,7 @@ function buildSiteList()
                if(site_no)         { myTitle.push("USGS " + site_no); }
                if(coop_site_no)    { myTitle.push("OWRD " + coop_site_no); }
 
-               // Add layer
+               // Set marker
                //                  
                myIcon                   = setIcon(site_id, site_tp_cd, site_status);
                mySiteInfo[site_id].icon = myIcon;
