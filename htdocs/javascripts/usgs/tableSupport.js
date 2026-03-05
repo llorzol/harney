@@ -4,9 +4,12 @@
  * datatablesSupport is a JavaScript library to provide a set of functions to build
  *  a table with buttons to export table content.
  *
- * version 3.11
- * February 20, 2025
-*/
+ $Id: /var/www/html/klamath_wells/javascripts/usgs/tableSupport.js, v 3.10 2026/01/27 20:02:09 llorzol Exp $
+ $Revision: 3.10 $
+ $Date: 2026/01/27 20:02:09 $
+ $Author: llorzol $
+ *
+ */
 
 /*
 ###############################################################################
