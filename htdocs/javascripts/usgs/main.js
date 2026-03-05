@@ -4,8 +4,11 @@
  * Main is a JavaScript library to provide a set of functions to manage
  *  the web requests.
  *
- * version 3.17
- * February 21, 2025
+ $Id: /var/www/html/klamath_wells/javascripts/usgs/main.js, v 3.22 2026/01/27 20:02:09 llorzol Exp $
+ $Revision: 3.22 $
+ $Date: 2026/01/27 20:02:09 $
+ $Author: llorzol $
+ *
 */
 
 /*
@@ -31,20 +34,12 @@
 # DEALINGS IN THE SOFTWARE.
 ###############################################################################
 */
-// Prevent page jumping
-//
-jQuery('.noJump').click(function(e){
-
-   // Prevent jumping to top of page
-   //
-   e.preventDefault();
-
-   });
 
 // Global variables for icon symbols
 //
-var mySites;
-var BasinBoundary;
+var mySites = null;
+var myGwData = null;
+var errorMessage = null;
 
 var mapSymbolUrl         = "icons/";
 
@@ -71,6 +66,8 @@ var wellconstructionLink = "/well_construction/index.html?";
 //var wellconstructionLink = "https://or.water.usgs.gov/projs_dir/well_construction/index.html?";
 
 var dvLink               = "https://waterdata.usgs.gov/nwis/dv?";
+//var dvLink               = `https://waterdata.usgs.gov/monitoring-location/USGS-${site_no}/#dataTypeId=daily-72019-0&period=periodOfRecord&showFieldMeasurements=true`
+var dvLink               = 'https://waterdata.usgs.gov/monitoring-location'
 
 var owrdLink             = 'https://apps.wrd.state.or.us/apps/gw/gw_info/gw_hydrograph/Hydrograph.aspx?gw_logid='
 
@@ -85,229 +82,93 @@ var delimiter        = '\t';
 
 // Prepare when the DOM is ready 
 //
-$(document).ready(function() 
-  {
-   // Loading message
-   //
-   message = "Preparing sites and basin information";
-   openModal(message);
-   //closeModal();
- 
-   // Set selection of agency and status
-   //
-   $("#monitoringAgency").val('ALL');
-   $("#monitoringStatus").val('All wells');
-   $("#finderLinks").val('byStationName wells');
+$(document).ready(function() {
+    // Loading message
+    //
+    message = "Preparing sites and basin information";
+    openModal(message);
+    closeModal();
 
-   // Build ajax requests
-   //
-   var webRequests  = [];
+    // Set selection of agency and status
+    //
+    $("#monitoringAgency").val('ALL');
+    $("#monitoringStatus").val('All wells');
+    $("#finderLinks").val('byStationName wells');
 
-   // Request for site information
-   //
-   var request_type = "GET";
-   var script_http  = "/cgi-bin/harney/requestCollectionFile.py";
-   var dataType     = "json";
-      
-   // Web request
-   //
-    webRequests.push($.ajax( {
-      method:   request_type,
-      url:      script_http,
-      data:     data_http,
-      dataType: dataType,
-      success: function (myData) {
-        message = "Processed site information";
-        openModal(message);
-        fadeModal(2000);
-        mySites = myData;
-        console.log(`mySites ${mySites}`);
-      },
-      error: function (error) {
-        message = `Failed to load site information ${error}`;
-        openModal(message);
-        fadeModal(2000);
+    // Build ajax requests
+    //
+    const urls   = [];
+
+    // Request for site information
+    //
+    urls.push("/cgi-bin/harney/requestCollectionFile.py");
+
+    // Request for water-level information
+    //
+    let Url = "/cgi-bin/harney/porGwChange.py";
+    let params = new URLSearchParams();
+    params.append("SeasonalIntervals", `${SeasonAgruments.join(" ")}`)
+    if(startingYear.length > 0) { params.append("startingYear", startingYear); }
+
+    // Web request
+    //
+    urls.push(`${Url}?${params}`);
+
+    // Set basin boundary
+    //
+    if(BasinBoundary) {
+        console.log(`Adding BasinBoundary ${BasinBoundary}`);
+        urls.push(BasinBoundary)
+    }
+
+    // Call the async function
+    //
+    webRequests(urls, 'json', processData)
+});
+
+function processData([mySites, myGwData, BasinBoundary]) {
+    console.log("processData");
+    console.log(mySites);
+    console.log(myGwData);
+    console.log(BasinBoundary);
+
+    // Check for site data
+    //
+    if (!mySites) {
+
+        // Warning message
+        //
+        message = `No site information for Harney Basin website`;
+        console.log(message);
+        updateModal(message);
+        fadeModal(3000);
+
         return false;
-      }
-   }));
+    }
+    
+    // Check for site period of recod data
+    //
+    if (!myGwData) {
 
-   // Request for water-level information
-   //
-   var request_type = "GET";
-   var script_http  = "/cgi-bin/harney/porGwChange.py";
-   var data_http    = "SeasonalIntervals=" + SeasonAgruments.join(" ");
-   if(startingYear.length > 0)
-     {
-      data_http += "&startingYear=" + startingYear;
-     }
-   var dataType     = "json";
-   console.log("just ran porGwChange.py")
-      
-   // Web request
-   //
-    webRequests.push($.ajax( {
-      method:   request_type,
-      url:      script_http,
-      data:     data_http,
-      dataType: dataType,
-      success: function (myData) {
-        message = "Processed groundwater change information";
-        openModal(message);
-        fadeModal(2000);
-        processGwChange(myData);
-        console.log(`processGwChange ${myData}`);
-      },
-      error: function (error) {
-        message = `Failed to load groundwater change information ${error}`;
-        openModal(message);
-        fadeModal(2000);
+        // Warning message
+        //
+        message = `No site groundwater information for Harney Basin website`;
+        console.log(message);
+        updateModal(message);
+        fadeModal(3000);
+
         return false;
-      }
-   }));
-
-   // Set basin boundary
-   //	
-   //console.log("BasinBoundary " + BasinBoundary);
+    }
+    processGwChange(myGwData);
+    
+    // Set basin boundary
+    //
+    if(BasinBoundary) {
+        console.log("Adding BasinBoundary ", BasinBoundary);
+    }
            
-   if(BasinBoundary)
-     {
-      console.log("Adding BasinBoundary " + BasinBoundary);
+    // Build map
+    //	
+    buildMap(mySites, myGwData, BasinBoundary);
 
-      // Request for basin boundary
-      //
-      var request_type = "GET";
-      var script_http  = BasinBoundary;
-      var data_http    = "";
-      var dataType     = "json";
-      
-      // Web request
-      //
-       webRequests.push($.ajax( {
-         method:   request_type,
-         url:      script_http,
-         data:     data_http,
-         dataType: dataType,
-         success: function (myData) {
-           message = "Processed basin boundary information";
-           openModal(message);
-           fadeModal(2000);
-           BasinBoundary = myData;
-           console.log(`mySites ${mySites}`);
-         },
-         error: function (error) {
-           message = `Failed to load basin boundary information ${error}`;
-           openModal(message);
-           fadeModal(2000);
-           return false;
-         }
-       }));
-     }
-
-   // Run ajax requests
-   //
-   var j       = 0;
-   $.when.apply($, webRequests).then(function() {
-        console.log('Responses');
-        //console.log("Responses length " + arguments.length);
-        //console.log(arguments);
-
-        // Retrieve site information
-        //
-        var i = 0;
-        if(arguments.length > 0)
-          {
-           var myInfo  = arguments[i];
-           //console.log("arguments " + i);
-           //console.log(arguments[i]);
-
-           if(myInfo[1] === "success")
-             {
-              // Loading message
-              //
-              message = "Processed site information";
-              openModal(message);
-              fadeModal(2000);
-
-              mySites     = myInfo[0];
-             }
-            else
-             {
-              // Loading message
-              //
-              message = "Failed to load site information";
-              openModal(message);
-              fadeModal(2000);
-              return false;
-             }
-          }
-
-        // Retrieve groundwater change information
-        //
-        i++;
-        console.log("Retrieve groundwater change information ");
-        //console.log(arguments[i]);
-        if(arguments.length > i)
-          {
-           var myInfo = arguments[i];
-
-           if(myInfo[1] === "success")
-             {
-              // Loading message
-              //
-              message = "Processed groundwater change information";
-              openModal(message);
-              fadeModal(2000);
-
-              processGwChange(myInfo[0]);
-             }
-            else
-             {
-              // Loading message
-              //
-              message = "Failed to load groundwater change information";
-              openModal(message);
-              fadeModal(2000);
-              return false;
-             }
-          }
-
-        // Retrieve basin boundary information
-        //
-        i++;
-        console.log("Retrieve basin boundary " + i);
-        //console.log(arguments[i]);
-        if(arguments.length > i)
-          {
-           var myInfo = arguments[i];
-
-           if(myInfo[1] === "success")
-             {
-              // Loading message
-              //
-              message = "Processed basin boundary information";
-              openModal(message);
-              fadeModal(2000);
-
-              BasinBoundary = myInfo[0];
-             }
-            else
-             {
-              // Loading message
-              //
-              message = "Failed to load basin boundary information";
-              openModal(message);
-              fadeModal(2000);
-              return false;
-             }
-          }
-
-        //console.log("done with main");
-        fadeModal(2000);
-
-        buildMap();
-
-        // Side panel
-        //
-        //leftPanel();
-   });
-  });
+}
