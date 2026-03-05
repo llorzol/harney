@@ -4,8 +4,11 @@
  * Map is a JavaScript library to set of functions to build
  *  a map.
  *
- * version 3.35
- * February 20, 2025
+ $Id: /var/www/html/harney/javascripts/usgs/map.js, v 3.37 2026/01/27 20:07:21 llorzol Exp $
+ $Revision: 3.37 $
+ $Date: 2026/01/27 20:07:21 $
+ $Author: llorzol $
+ *
 */
 
 /*
@@ -63,13 +66,15 @@ $(".gwLevelContent").html('');
 
 // Build the map and initialize map features
 //
-function buildMap() 
+function buildMap(mySites, myGwData, BasinBoundary) 
   {
    // Message
    //
    message = "Building map";
    openModal(message);
+   fadeModal(3000);
    console.log(message);
+   console.log(mySites);
       
    // Create map and add controls
    //  disable scrollwheel
@@ -185,6 +190,7 @@ function buildMap()
    // Add base map
    //
    map.addLayer(ESRItopoBasemap);
+   $("#ESRItopoBasemap a").addClass('active');
       
    // Create the miniMap
    //
@@ -597,9 +603,7 @@ function createTable (mySiteSet)
    var summary_table = [];
 
        summary_table.push('<span id="stationsCaption" class="border-bottom border-dark border-2 text-center fs-5 fw-bold">' +  myCaption.join(" ") + '</span>');
-       summary_table.push('<table id="stationsTable" class="stationsTable table table-striped-columns border mt-4">');
-       //summary_table.push('<caption id="stationsCaption" class="text-center fs-5 fw-bold">' +  myCaption.join(" ") + '</caption>');
-       //summary_table.push('<thead class="bottom-border">');
+       summary_table.push('<table id="stationsTable" class="stationsTable table table-striped-columns border mt-4 mb-5">');
        summary_table.push('<thead class="text-start fs-6 fw-bold">');
        summary_table.push('<tr scope="row" class="pe-1 border border-dark border-2">');
        summary_table.push(' <th scope="col">Status</th>');
