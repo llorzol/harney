@@ -1,0 +1,198 @@
+
+                 Harney Basin Wells Website
+=============================================================================
+January 20, 2024
+=============================================================================
+
+=============================================================================
+
+                 Check/Build collection file
+-----------------------------------------------------------------------------
+==============================================================================
+
+Steps
+-------------------------------------
+USGS
+====
+The script retrieves the sites and does a two step process to obtain the information
+
+USGS site service for periodic sites
+-------------------------------------
+site information (well/hole depth)
+----------------
+https://waterservices.usgs.gov/nwis/site/?format=rdb&countyCd=41035&siteOutput=expanded&siteStatus=all&siteType=GW&hasDataTypeCd=gw
+
+period of record
+----------------
+https://waterservices.usgs.gov/nwis/site/?format=rdb&countyCd=41035&siteStatus=all&siteType=GW&hasDataTypeCd=gw&outputDataTypeCd=gw
+
+USGS site service for recorders
+-------------------------------------
+site information (well/hole depth)
+----------------
+https://waterservices.usgs.gov/nwis/site/?format=rdb&countyCd=41035&siteOutput=expanded&siteStatus=all&siteType=GW&hasDataTypeCd=iv,dv
+
+period of record
+----------------
+https://waterservices.usgs.gov/nwis/site/?format=rdb&countyCd=41035&siteStatus=all&siteType=GW&hasDataTypeCd=iv,dv&outputDataTypeCd=iv,dv
+
+
+OWRD
+====
+Retrieve OWRD files (see below for instructions)
+
+   Download site file
+   ------------------
+   1) Open page in browser
+      https://apps.wrd.state.or.us/apps/gw/gw_info/gw_info_report/gw_search.aspx
+   2) In "Well Log" dropdown select HARN
+   3) Click text button in Downloadable Data section
+   4) Click "Site Information"
+   5) Copy file "gw_site.txt" in the harney working directory in owrd data folder
+
+   example request for a single site
+   ------------------------------------
+   https://apps.wrd.state.or.us/apps/gw/gw_data_rws/api/HARN00000755/gw_site_summary/?public_viewable=
+   
+   Download other ID file
+   ------------------
+   1) Open page in browser
+     https://apps.wrd.state.or.us/apps/gw/gw_info/gw_info_report/gw_search.aspx
+   2) In "Well Log" dropdown select HARN
+   3) Click text button in Downloadable Data section
+   4) Click "Other Identifiers for sites"
+   5) Copy file "gw_other_identity.txt" in the klam working directory
+     
+   example request for a single site
+   ------------------------------------
+   https://apps.wrd.state.or.us/apps/gw/gw_data_rws/api/HARN00000755/gw_site_summary/?public_viewable=
+
+
+
+-------------------------------------
+Build collection periodic sites
+-------------------------------------
+Using the current collection.txt as a seed
+
+Run
+----
+./buildCollectionFile.py -sites data/collection.txt -output allsites.txt --owrd data/OWRD/gw_site.txt --other data/OWRD/gw_other_identity.txt --counties 41025 --count 10
+    41025 - Harney County Oregon
+
+WinMerge
+----
+compare and review changes in the current data/collection.txt with collection.txt
+
+Non-public staging-or.water
+----------------------
+Use AFS
+Copy collection/recorder files to cgi-bin/klamath_wells/data directory
+Review results with web browser
+
+public or.water
+----------------------
+Use AFS
+Copy collection/recorder files to cgi-bin/klamath_wells/data directory
+Review results with web browser
+
+
+
+
+            Some requests to USGS, OWRD, and CDWR web services
+==========================================================================================
+------------------------------------------------------------------------------------------
+
+Census key for Fips Codes
+-------------------------------------
+https://www2.census.gov/geo/docs/reference/codes/files/national_county.txt
+
+Thank you for your interest in the Census Data API. Your API key is 2b9ded633989975402c9be034053eed3473b7f2c
+
+
+
+
+                Build waterlevel and site summary file
+-----------------------------------------------------------------------------
+==============================================================================
+
+Steps
+-------------------------------------
+USGS
+====
+The script retrieves the sites and waterlevel measurements with a two step process to obtain the information
+
+OWRD
+====
+Retrieve OWRD files (see below for instructions)
+
+   Download periodic waterlevel file
+   ------------------
+   1) Open page in browser
+      https://apps.wrd.state.or.us/apps/gw/gw_info/gw_info_report/gw_search.aspx
+   2) In "Well Log" dropdown select HARN
+   3) Click text button in Downloadable Data section
+   4) Click "Measured Water Levels"
+   5) Copy file "gw_measured_water_level.txt" in the klam working directory in owrd data folder
+   
+   Download recorder waterlevel file
+   ------------------
+   1) Open page in browser
+     https://apps.wrd.state.or.us/apps/gw/gw_info/gw_info_report/gw_search.aspx
+   2) In "Well Log" dropdown select HARN
+   3) Click text button in Downloadable Data section
+   4) Click "Recorder Water Level Daily - Mean"
+   5) Copy file "gw_recorder_water_level_mean.txt" in the klam working directory
+
+CDWR
+====
+The script retrieves the sites
+
+Run
+====
+
+./buildWaterlevelFile.py -sites data/collection.txt -output waterlevels.txt --owrd_gw data/OWRD/gw_measured_water_level.txt --owrd_rc data/OWRD/gw_recorder_water_level_mean.txt --usgs --owrd
+
+
+
+
+
+------------------------------------------------------------------------------           
+                         USGS web service
+------------------------------------------------------------------------------           
+==============================================================================
+site
+-------------------------------------
+https://waterservices.usgs.gov/nwis/site/?format=rdb&sites=445620117581501&siteOutput=expanded&siteStatus=all
+
+groundwater measurements
+-------------------------------------
+https://waterservices.usgs.gov/nwis/gwlevels/?format=rdb&sites=421319121472501&startDT=1900-01-01&siteStatus=all
+
+
+------------------------------------------------------------------------------           
+                         OWRD web service
+------------------------------------------------------------------------------           
+==============================================================================
+site
+-------------------------------------
+https://apps.wrd.state.or.us/apps/gw/gw_data_rws/api/KLAM0000588/gw_site_summary/?public_viewable=
+
+groundwater measurements
+-------------------------------------
+https://apps.wrd.state.or.us/apps/gw/gw_data_rws/api/KLAM0000588/gw_measured_water_level/?start_date=1/1/1905&end_date=1/1/2025&public_viewable=
+
+https://apps.wrd.state.or.us/apps/gw/gw_data_rws/api/KLAM0010174/gw_measured_water_level/?start_date=1/1/1905&end_date=1/1/2025&public_viewable=
+
+hydrograph
+-------------------------------------
+https://apps.wrd.state.or.us/apps/gw/gw_info/gw_hydrograph/Hydrograph.aspx?gw_logid=KLAM0010252
+
+Search page
+-------------------
+https://apps.wrd.state.or.us/apps/gw/gw_info/gw_info_report/gw_search.aspx
+
+Developer page
+-------------------
+https://apps.wrd.state.or.us/apps/gw/gw_data_rws/Index.html#hide1
+
+
