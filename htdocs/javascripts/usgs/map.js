@@ -4,9 +4,9 @@
  * Map is a JavaScript library to set of functions to build
  *  a map.
  *
- $Id: /var/www/html/harney/javascripts/usgs/map.js, v 3.37 2026/01/27 20:07:21 llorzol Exp $
- $Revision: 3.37 $
- $Date: 2026/01/27 20:07:21 $
+ $Id: /var/www/html/harney/javascripts/usgs/map.js, v 3.38 2026/03/05 15:26:02 llorzol Exp $
+ $Revision: 3.38 $
+ $Date: 2026/03/05 15:26:02 $
  $Author: llorzol $
  *
 */
@@ -189,8 +189,8 @@ function buildMap(mySites, myGwData, BasinBoundary)
 	  
    // Add base map
    //
-   map.addLayer(ESRItopoBasemap);
-   $("#ESRItopoBasemap a").addClass('active');
+   map.addLayer(USGSTopoBasemap);
+   $("#USGSTopoBasemap a").addClass('active');
       
    // Create the miniMap
    //
