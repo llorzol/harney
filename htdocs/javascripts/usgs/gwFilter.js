@@ -4,9 +4,9 @@
  * parameterData is a JavaScript library to provide a set of functions to manage
  *  the data exploration tool.
  *
- $Id: /var/www/html/klamath_wells/javascripts/usgs/gwFilter.js, v 3.36 2026/01/27 20:01:59 llorzol Exp $
- $Revision: 3.36 $
- $Date: 2026/01/27 20:01:59 $
+ $Id: /var/www/html/harney/javascripts/usgs/gwFilter.js, v 3.37 2026/03/06 08:52:14 llorzol Exp $
+ $Revision: 3.37 $
+ $Date: 2026/03/06 08:52:14 $
  $Author: llorzol $
  *
 */
@@ -38,6 +38,7 @@
 // Set groundwater change data
 //-----------------------------------------------
 var gwChangeSites = {};
+var gwChangeUrl   = '/cgi-bin/harney/requestGwChange.py'
 
 // Set starting year
 //-----------------------------------------------
@@ -45,18 +46,12 @@ var startingYear = "2015";
 
 // Set starting and ending seasons
 //-----------------------------------------------
-var SeasonIntervals = { 
-                        'Spring': ['03-01', '05-31', 'Min'],
-                        'Summer': ['06-01', '08-31', 'Max'],
-                        'Fall'  : ['09-01', '11-30', 'Max'],
-                        'Winter': ['12-01', '02-28', 'Min']
-                      };
-var SeasonIntervals = { 
-    'Spring': ['03','04','05','Min'],
-    'Summer': ['06','07','08','Max'],
-    'Fall'  : ['09','10','11','Max'],
-    'Winter': ['12','01','02','Min']
-                      };
+var SeasonIntervals = {
+    'Spring': ['04','05','06','Min'],
+    'Summer': ['07','08','09','Max'],
+    'Fall'  : ['10','11','12','Max'],
+    'Winter': ['01','02','03','Min']
+};
 var SeasonsList = ['Winter','Spring','Summer','Fall'];
 
 var selectedSeasonIntervals;
@@ -444,7 +439,7 @@ function requestGwChange(startingSeason, startingYear, endingSeason, endingYear)
     // Request for groundwater level changes
     //
       $.ajax({
-          url: '/cgi-bin/klamath_wells/requestGwChange.py',
+          url: gwChangeUrl,
           method: 'GET',
           dataType: 'json',
           data: {
