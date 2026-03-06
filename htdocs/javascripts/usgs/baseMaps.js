@@ -4,9 +4,9 @@
  * baseMaps is a JavaScript library to set of functions to manage
  *  the base maps layers on the map.
  *
- $Id: /var/www/html/klamath_wells/javascripts/usgs/baseMaps.js, v 2.06 2026/01/27 20:01:58 llorzol Exp $
- $Revision: 2.06 $
- $Date: 2026/01/27 20:01:58 $
+ $Id: /var/www/html/harney/javascripts/usgs/baseMaps.js, v 2.07 2026/01/27 20:06:35 llorzol Exp $
+ $Revision: 2.07 $
+ $Date: 2026/01/27 20:06:35 $
  $Author: llorzol $
  *
 */
