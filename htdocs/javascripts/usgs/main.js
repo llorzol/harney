@@ -4,9 +4,9 @@
  * Main is a JavaScript library to provide a set of functions to manage
  *  the web requests.
  *
- $Id: /var/www/html/harney/javascripts/usgs/main.js, v 3.22 2026/01/27 20:02:09 llorzol Exp $
- $Revision: 3.22 $
- $Date: 2026/01/27 20:02:09 $
+ $Id: /var/www/html/harney/javascripts/usgs/main.js, v 3.23 2026/03/05 15:25:04 llorzol Exp $
+ $Revision: 3.23 $
+ $Date: 2026/03/05 15:25:04 $
  $Author: llorzol $
  *
 */
