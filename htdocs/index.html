@@ -1,15 +1,15 @@
 <!DOCTYPE html> 
 
 <!-- 
- $Id: /var/www/html/klamath_wells/index.html, v 1.06 2026/03/05 14:46:35 llorzol Exp $
- $Revision: 1.06 $
- $Date: 2026/03/05 14:46:35 $
+ $Id: /var/www/html/harney_wells/index.html, v 1.05 2026/01/27 19:52:56 llorzol Exp $
+ $Revision: 1.05 $
+ $Date: 2026/01/27 19:52:56 $
  $Author: llorzol $
 -->
 
 <html lang="en">
   <head>
-    <title>U.S. Geological Survey Upper Klamath Basin Well Mapper</title>
+    <title>USGS-OWRD Harney Basin Data Mapper</title>
 
     <!-- meta -->
     <!--#include virtual="includes/meta_inc.html" -->
@@ -49,8 +49,8 @@
               <a class="navbar-brand" href="#">
                 <div class="ps-1">
                   <img class="pe-2" id="usgsButton" style="height: 2rem;" src="logos/usgs4.png" alt="USGS> Geological Survey Logo" title="USGS, Oregon Water Science Center">
-                  <img id="usbrButton" style="height: 2rem;" src="logos/usbr.png" alt="USBR Columbia-Pacific Northwest Region Logo" title="USBR Columbia-Pacific Northwest Region">
-                  <span class="fs-5 fw-bold ps-4">Upper Klamath Basin Well Mapper</span>
+                  <img class="pe-2" id="owrdButton" style="height: 2.5rem;" src="logos/owrdLogo2.png" alt="Oregon Water Resources Department Logo" title="Oregon Water Resources Department">
+                  <span class="fs-5 fw-bold ps-4">USGS-OWRD Harney Basin Data Mapper</span>
                 </div>
               </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#myNavbar" aria-controls="myNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,14 +73,16 @@
                       </a>
                     </li>
                     <li>
-                      <a class="dropdown-item fs-6 fw-bold text-white text-decoration-none mt-2" href="https://www.usbr.gov/pn/" target="_blank">
-                        USBR Columbia-Pacific Northwest Region
-                      </a>
-                    </li>
-                    <li>
                       <a class="dropdown-item fs-6 fw-bold text-white text-decoration-none mt-2" href="https://www.oregon.gov/OWRD/" target="_blank">
                         Oregon Water Resources Department Home
                       </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item fs-6 fw-bold text-white text-decoration-none mt-2" href="http://www.oregon.gov/owrd/Pages/Place/Malheur_Lake_Basin.aspx" target="_blank">Oregon Water Resources
+                        Department Malheur Lake Basin</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item fs-6 fw-bold text-white text-decoration-none mt-2" href="http://hcwatershedcouncil.com/community-based-water-planning/" target="_blank">Harney County Watershed Council</a>
                     </li>
                   </ul>
                 </li>
@@ -128,7 +130,6 @@
                       <option id="all"  value="ALL" selected="selected">All agencies</option>
                       <option id="usgs" value="USGS">USGS</option>
                       <option id="owrd" value="OWRD">OWRD</option>
-                      <option id="cdwr" value="CDWR">CDWR</option>
                     </select>
                   </div>
 
@@ -169,7 +170,6 @@
                       <option id="byStationName" value="byStationName wells" selected="selected">Station Name</option>
                       <option id="bySiteNumber" value="bySiteNumber wells">USGS Site Number</option>
                       <option id="byWellLogId" value="byWellLogId wells">OWRD Well Log ID</option>
-                      <option id="byCdwrId" value="byStateObs wells">CDWR Site Code</option>
                       <option id="byStateObs" value="byStateObs wells">OWRD State Obs Name</option>
                     </select>
                     <input type="text" id="searchSites" class="mt-2" placeholder="Enter search text">
@@ -220,8 +220,6 @@
                     <th scope="col">
                       <span class="NumberOWRD pe-1">0</span>OWRD monitored sites</th>
                     <th scope="col">
-                      <span class="NumberCDWR pe-1">0</span>CDWR monitored sites</th>
-                    <th scope="col">
                       <span class="NumberALL pe-1">0</span>Monitored by two or more agencies</th>
                   </tr>
                 </thead>
@@ -230,12 +228,10 @@
                   <tr scope="row" class="pe-2">
                     <td>Site has been monitored by USGS only</td>
                     <td>Site has been monitored by OWRD only</td>
-                    <td>Site has been monitored by CDWR only</td>
                     <td>Site has been monitored by USGS or OWRD or CDWR collectively</td>
                   </tr>
 
                   <tr scope="row" class="text-center">
-                    <td>Active/Inactive</td>
                     <td>Active/Inactive</td>
                     <td>Active/Inactive</td>
                     <td>Active/Inactive</td>
@@ -251,11 +247,6 @@
                       <span class="NumberOWRDactive">0</span>
                       /
                       <span class="NumberOWRDinactive">0</span>
-                    </td>
-                    <td class="text-center">
-                      <span class="NumberCDWRactive">0</span>
-                      /
-                      <span class="NumberCDWRinactive">0</span>
                     </td>
                     <td class="text-center">
                       <span class="NumberALLactive">0</span>
@@ -296,7 +287,7 @@
         <div class="modal-content bg-success">
 
           <div class="modal-header">
-            <span class="modal-title fs-5 fw-bold text-white">USGS Upper Klamath Basin Well Mapper</span>
+            <span class="modal-title fs-5 fw-bold text-white">USGS-OWRD Harney Basin Data Mapper</span>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
 
